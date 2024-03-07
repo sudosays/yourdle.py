@@ -1,4 +1,4 @@
-# Yourdle.py: A local CLI-based Wordle clone
+# yourdle.py: A local CLI-based Wordle clone
 
 This was written in about 2 hours while procrastinating. It is hacky and
 probably prone to errors. Caveat emptor.
@@ -14,6 +14,23 @@ Run:
 ```
 
 On first run it will download and prepare a wordlist into `wordlist-en.txt` roughly ~95KB in size.
+
+### How to play
+
+The feedback from your guesses is a bit minimal. Upper case characters mean that
+the character is both correct and in the correct place. Lower case characters
+mean that the character is correct, but in the wrong position. An asterisk means
+that the character was incorrect.
+
+Example:
+
+1. The secret word is "ISSUE".
+2. Your guess is "SCENE".
+3. The feedback is `s***E`.
+
+Here 's' is correct, but in the wrong position. 'E' is also correct and in the
+correct position.
+
 
 Some options include:
 
