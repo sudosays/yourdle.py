@@ -12,6 +12,30 @@ import requests
 __version__ = "0.0.2"
 
 
+GREETING = """Welcome to yourdle.py!
+
+How to play:
+
+Try to guess the secret 5-letter word within 6 attempts.
+
+The feedback from your guesses is a bit minimal. Upper case characters mean that
+the character is both correct and in the correct place. Lower case characters
+mean that the character is correct, but in the wrong position. An asterisk means
+that the character was incorrect.
+
+Example:
+
+1. The secret word is "ISSUE".
+2. Your guess is "SCENE".
+3. The feedback is `s***E`.
+
+Here 's' is correct, but in the wrong position. 'E' is also correct and in the
+correct position.
+
+Good luck!
+"""
+
+
 def prepare_wordlist():
     response = requests.get(
         "https://raw.githubusercontent.com/dwyl/english-words/master/words_alpha.txt"
@@ -34,7 +58,7 @@ def valid_word(word):
 def check_guess(guess, available_letters):
     guess = guess.lower()
     if guess == secret_word:
-        return True, secret_word.upper()
+        return True, secret_word.upper(), available_letters
 
     feedback = "?????"
     secret_word_copy = secret_word
@@ -64,48 +88,51 @@ def main(secret_word, word_table):
     attempts = 0
     max_attempts = 6
 
-    guesses = {}
+    guesses = []
     feedbacks = []
     available_letters = "abcdefghijklmnopqrstuvwxyz"
+
+    print(GREETING)
 
     def show_grid():
         for i in range(max_attempts):
             if i < len(feedbacks):
-                print(feedbacks[i])
+                print(f"{feedbacks[i]}\t{guesses[i].upper()}")
             else:
                 print("?????")
-
-        print(f"\nAttempt {attempts+1}/{max_attempts}")
-        print(f"\n{available_letters}\n----")
 
     # start yourdle
     while attempts < max_attempts:
         show_grid()
-        guess = input("Your guess:").strip()
+        print(f"\nAttempt {attempts+1}/{max_attempts}")
+        print(f"\n{available_letters}\n----")
+        guess = input("Your guess:").strip().lower()
         if valid_word(guess):
-            if guess not in guesses.keys():
+            if guess not in guesses:
                 attempts += 1
-                guesses[guess] = 1
+                guesses.append(guess)
                 done, feedback, available_letters = check_guess(
                     guess, available_letters
                 )
                 feedbacks.append(feedback)
                 if done:
+                    print("\nCongratulations!")
                     print(
-                        f"You guessed the secret word: {secret_word.upper()} in {attempts} attempts"
+                        f"\nYou guessed the secret word: {secret_word.upper()} in {attempts} attempts\n"
                     )
                     show_grid()
+                    print()
                     break
                 else:
                     if attempts >= max_attempts:
-                        print(f"You failed to guess the word: {secret_word.upper()}")
+                        print(f"\nYou failed to guess the word: {secret_word.upper()}")
                         break
                     else:
                         continue
             else:
                 print(f"You have already guessed {guess.upper()}.")
         else:
-            print(f"{guess.upper()} is not a valid word.")
+            print(f"{guess.upper()} is not a valid 5-letter word.")
 
 
 if __name__ == "__main__":
