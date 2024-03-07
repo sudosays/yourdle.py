@@ -44,6 +44,8 @@ Thanks to [ @dwyl ](https://github.com/dwyl/) for the
 [english-words](https://github.com/dwyl/english-words/) repository. This project
 makes use of `words_alpha.txt` to generate an english wordlist.
 
+Thank you to the alpha testers [@HermanMartinus](https://github.com/HermanMartinus) and Simon. 
+
 ## Contributing
 
 I am not planning on accepting any pull requests.
